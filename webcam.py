@@ -3,6 +3,7 @@ from webcamClass import webcam
 import cv2 
 import mediapipe as mp
 from mediapipe.tasks import python
+from mediapipe.framework.formats import landmark_pb2
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -29,14 +30,21 @@ with mp_pose.Pose(
 			image,
 			result.pose_landmarks,
 			mp_pose.POSE_CONNECTIONS,
-        	landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
+        	landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style(),
 		)
+		if result.pose_landmarks:
+			pose_landmarks = result.pose_landmarks
+			l_knee_x = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE].x * vid.imgwidth
+			print(l_knee_x)
+		else:
+			print("Pose landmarks not detected.")
+
 
 		cv2.imshow('frame', cv2.flip(image, 1))
 		if cv2.waitKey(1) & 0xFF == ord('q'): 
 			break
 
 # After the loop release the cap object 
-vid.release() 
+vid.CameraRelease()
+del vid
 # Destroy all the windows 
-cv2.destroyAllWindows() 
