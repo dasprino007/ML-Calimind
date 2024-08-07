@@ -15,8 +15,8 @@ def startWebcamProcess():
 	with mp_pose.Pose(
 		min_detection_confidence=0.5,
 		min_tracking_confidence=0.5) as pose:
-		while(webcam.CameraON): 
-			ret, frame = vid.readCamera()
+		while(vid.CameraON): 
+			ret, frame = vid.StartCamera()
 
 			# ChangeCVT()
 			frame.flags.writeable = False
@@ -34,13 +34,11 @@ def startWebcamProcess():
 				landmark_drawing_spec =	mp_drawing_styles.get_default_pose_landmarks_style()
 			)
 
-			print(webcam.showFrames())
+			print(vid.showFrames())
 			
-			cv2.imshow('frame', cv2.flip(image, 1))
+			vid.showWebcam(image, "Webcam", 1)
 			if cv2.waitKey(1) & 0xFF == ord('q'): 
 				break
 
 	# After the loop release the cap object 
-	webcam.destroyCamera()
-
-startWebcamProcess()
+	vid.destroyCamera()

@@ -5,16 +5,24 @@ class webcam:
         self.webcam = cv.VideoCapture(0)
         self.frames = int(self.cap.get(cv.CAP_PROP_FRAME_COUNT))
         self.currentFrame = 0
-        self.CameraON = False
+        self.CameraON = True
 
-    def readCamera():
+    def StartCamera():
         status, frame = webcam.webcam.read()
+
         if(status == False) :
             webcam.CameraON = True
             return status, frame
+        
+        webcam.CameraON = False
+        print("A camera não funciono")
 
-    def showFrames():
+    def showFps():
         return webcam.frames
+
+    def showWebcam(image, name, flip = 0):
+        img = cv.flip(image, flip) # para que img fique certa
+        cv.imshow(name, img)
 
     def destroyCamera():
         webcam.webcam.release() # destroy the camera
