@@ -2,22 +2,16 @@
 from webcamClass import webcam
 import cv2 
 import mediapipe as mp
-from mediapipe.tasks import python
-from mediapipe.framework.formats import landmark_pb2
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
-base_options = python.BaseOptions(model_asset_path='./model/pose_landmarker_full.task')
-
-
 
 # define a video capture object 
 vid = webcam()
 IsCameraOn = True
-with mp_pose.Pose(
-    min_detection_confidence=0.6,
-    min_tracking_confidence=0.6) as pose:
+with mp_pose.Pose( min_detection_confidence=0.6, min_tracking_confidence=0.6) as pose:
+	
 	while(IsCameraOn): 
 		ret, frame = vid.ReadCamera()
 
@@ -28,12 +22,14 @@ with mp_pose.Pose(
 
 		image.flags.writeable = True
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
 		mp_drawing.draw_landmarks(
 			image,
 			result.pose_landmarks,
 			mp_pose.POSE_CONNECTIONS,
         	landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style(),
 		)
+
 		if result.pose_landmarks:
 			pose_landmarks = result.pose_landmarks
 			l_knee_x = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE].x * vid.img_width
