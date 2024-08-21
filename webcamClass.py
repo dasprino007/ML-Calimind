@@ -10,8 +10,8 @@ class webcam:
     
     def ReadCamera(self):
        status, frame = self.video.read()
-       self.imgHeight = frame.shape[0]
-       self.imgwidth = frame.shape[1]
+       self.img_Height = frame.shape[0]
+       self.img_width = frame.shape[1]
        return status, frame
     
     def CameraRelease(self):
