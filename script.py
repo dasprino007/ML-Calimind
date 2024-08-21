@@ -12,11 +12,6 @@ mp_pose = mp.solutions.pose
 posetion = "NULL"
 contador = 0
 
-def calc_angle(x1, y1, x2, y2):
-	theta = math.acos( (y2 - y1)*(-y1) / (math.sqrt(
-        (x2 - x1)**2 + (y2 - y1)**2 ) * y1) )
-	return int(180/math.pi) * theta
-
 # define a video capture object 
 vid = webcam()
 IsCameraOn = True
@@ -49,7 +44,7 @@ with mp_pose.Pose( min_detection_confidence=0.6, min_tracking_confidence=0.6) as
 				poseList.append([id, X, Y])
 
 			if len(poseList) > 0:
-				print(calc_angle(poseList[11][1], poseList[11][2], poseList[15][1], poseList[15][2]))
+				print(calc_angle(poseList[11][1], poseList[11][2], poseList[13][1], poseList[13][2]))
 				if(poseList[11][2] and poseList[12][2] >= poseList[13][2] and poseList[14][2]):
 					posetion = "down"
 

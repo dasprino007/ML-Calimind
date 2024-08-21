@@ -3,7 +3,7 @@ import cv2
 class webcam:
 
     def __init__(self):
-        self.video = cv2.VideoCapture('./teste.mp4')
+        self.video = cv2.VideoCapture(0)
         self.frames = self.video.get(cv2.CAP_PROP_FPS)
     
     def ReadCamera(self):
