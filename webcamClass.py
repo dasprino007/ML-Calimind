@@ -3,15 +3,11 @@ import cv2
 class webcam:
 
     def __init__(self):
-        self.video = cv2.VideoCapture(0)
+        self.video = cv2.VideoCapture('./teste.mp4')
         self.frames = self.video.get(cv2.CAP_PROP_FPS)
-        self.img_Height = 0.0
-        self.img_width = 0.0
     
     def ReadCamera(self):
        status, frame = self.video.read()
-       self.img_Height = frame.shape[0]
-       self.img_width = frame.shape[1]
        return status, frame
     
     def CameraRelease(self):

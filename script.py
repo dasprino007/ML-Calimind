@@ -2,14 +2,20 @@
 from webcamClass import webcam
 import cv2 
 import mediapipe as mp
+import numpy as np
+import math
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
-poseList = []
-pose = "NULL"
+posetion = "NULL"
 contador = 0
+
+def calc_angle(x1, y1, x2, y2):
+	theta = math.acos( (y2 - y1)*(-y1) / (math.sqrt(
+        (x2 - x1)**2 + (y2 - y1)**2 ) * y1) )
+	return int(180/math.pi) * theta
 
 # define a video capture object 
 vid = webcam()
@@ -28,7 +34,6 @@ with mp_pose.Pose( min_detection_confidence=0.6, min_tracking_confidence=0.6) as
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 		if result.pose_landmarks:
-			pose_landmarks = result.pose_landmarks
 			mp_drawing.draw_landmarks(
 				image,
 				result.pose_landmarks,
@@ -37,21 +42,21 @@ with mp_pose.Pose( min_detection_confidence=0.6, min_tracking_confidence=0.6) as
 			)
 
 		# teoricamente isso pegaria todos os pontos da pose
-			for id, im in enumerate(pose_landmarks.landmark):
-				X, Y = int(im.x * vid.img_width), int(im.y * vid.img_Height)
+			poseList = []
+			for id, im in enumerate(result.pose_landmarks.landmark):
+				h, w, _ = image.shape
+				X, Y = int(im.x * w), int(im.y * h)
 				poseList.append([id, X, Y])
 
-			print(poseList)
-   
-			if len(poseList) != 0:
+			if len(poseList) > 0:
+				print(calc_angle(poseList[11][1], poseList[11][2], poseList[15][1], poseList[15][2]))
 				if(poseList[11][2] and poseList[12][2] >= poseList[13][2] and poseList[14][2]):
-					print(poseList[11][2], poseList[13][2])
-					pose = "down"
+					posetion = "down"
 
-				if((poseList[12][2] and poseList[11][2] <= poseList[14][2] and poseList[13][2]) and pose == "down"):
-					print("contar 1")
-					pose = "NULL"
-					contador =+ 1
+				elif((poseList[12][2] and poseList[11][2] <= poseList[14][2] and poseList[13][2]) and posetion == "down"):
+					posetion = "NULL"
+					contador = contador + 1
+					print(contador)
 
 		else:
 			print("Pose not detected.")
