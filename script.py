@@ -12,6 +12,11 @@ mp_pose = mp.solutions.pose
 posetion = "NULL"
 contador = 0
 
+def calc_angle(x1, y1, x2, y2):
+	x_diff = x1 - y1
+	y_diff = x2 - y2
+	return math.degrees(math.atan2(x_diff, y_diff))
+
 # define a video capture object 
 vid = webcam()
 IsCameraOn = True
@@ -60,7 +65,6 @@ with mp_pose.Pose( min_detection_confidence=0.6, min_tracking_confidence=0.6) as
 		cv2.imshow('frame', cv2.flip(image, 1))
 		if cv2.waitKey(1) & 0xFF == ord('q') | contador == 10:
 			break
-
 # After the loop release the cap object 
 vid.CameraRelease()
 del vid
